@@ -13,23 +13,24 @@ class AnswerOption extends StatelessWidget {
   List? answers;
   QuizModel? quiz;
 
-
-  AnswerOption({
-    Key? key,
-    required this.optionText,
-    required this.number,
-    required this.setOption,
-    required this.selectedOption,
-    this.controller,
-    this.answers,
-    this.quiz
-  }) : super(key: key);
+  AnswerOption(
+      {Key? key,
+      required this.optionText,
+      required this.number,
+      required this.setOption,
+      required this.selectedOption,
+      this.controller,
+      this.answers,
+      this.quiz})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setOption(number);
+        if (quiz!.selectedAnswer == null) {
+          setOption(number);
+        }
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
@@ -46,7 +47,7 @@ class AnswerOption extends StatelessWidget {
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
                 colors: [
-                 selectedOption != number ? primaryColorLight : gradientColor1,
+                  selectedOption != number ? primaryColorLight : gradientColor1,
                   selectedOption != number ? primaryColorLight : gradientColor2,
                 ],
               ),
@@ -56,12 +57,14 @@ class AnswerOption extends StatelessWidget {
             ),
             child: optionText,
           ),
-           back: Container(
+          back: Container(
             constraints: const BoxConstraints(minHeight: 80),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xFF595f93)),
-              color: answers![int.parse(number!)] == quiz!.correctAnswer ? Colors.green : Colors.red,
+              border: Border.all(color: borderColor()),
+              color: answers![int.parse(number!)] == quiz!.correctAnswer
+                  ? greenColor
+                  : redColor,
               borderRadius: const BorderRadius.all(
                 Radius.circular(15),
               ),
@@ -71,5 +74,17 @@ class AnswerOption extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Color borderColor() {
+    final current = quiz;
+    // if (current!.selectedAnswer != null) {
+    //   return current.answers[int.parse(current.selectedAnswer!)] ==
+    //           current.correctAnswer
+    //       ? greenColor
+    //       : redColor;
+    // } else {
+    return primaryColorExtraLight;
+    // }
   }
 }

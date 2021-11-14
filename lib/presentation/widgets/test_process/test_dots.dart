@@ -17,7 +17,6 @@ class TestDots extends StatelessWidget {
         if (state is QuizLoadSuccess) {
           return Container(
             width: double.infinity,
-            // height: 100,
             child: Wrap(
               direction: Axis.horizontal,
               children: [
@@ -77,10 +76,10 @@ class TestDots extends StatelessWidget {
     if (current.selectedAnswer != null) {
       return current.answers[int.parse(current.selectedAnswer)] ==
               current.correctAnswer
-          ? Colors.green
-          : Colors.red;
+          ? greenColor
+          : redColor;
     } else {
-      return primaryColor;
+      return primaryColorExtraLight;
     }
   }
 }

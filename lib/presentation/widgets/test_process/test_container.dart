@@ -124,14 +124,17 @@ class _TestContainerState extends State<TestContainer> {
                 flex: 1,
                 child: DefaultButton(
                   press: checked ||
-                          widget.quizzes[currentQuestion].selectedAnswer != null
+                          widget.quizzes[currentQuestion].selectedAnswer !=
+                                  null &&
+                              currentQuestion + 1 != widget.quizzes.length
                       ? nextQuestion
                       : null,
                   text: Icon(
                     Icons.arrow_forward_ios,
                     color: checked ||
                             widget.quizzes[currentQuestion].selectedAnswer !=
-                                null
+                                    null &&
+                                currentQuestion + 1 != widget.quizzes.length
                         ? Colors.white
                         : primaryColorLight,
                   ),
@@ -241,3 +244,6 @@ class _TestContainerState extends State<TestContainer> {
     });
   }
 }
+
+// selectedOption/ currentQuestion / answers
+// answers[number] == quizzes[currentQuestion][selectedOption].correctAnswer
