@@ -30,6 +30,7 @@ class _TestContainerState extends State<TestContainer> {
   late FlipCardController _controller2;
   late FlipCardController _controller3;
   late int currentQuestion;
+  dynamic prevStoppedAt;
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _TestContainerState extends State<TestContainer> {
     selectedOption = null;
     checked = false;
     currentQuestion = 0;
+    prevStoppedAt = -1;
     initAnswers();
   }
 
@@ -180,7 +182,6 @@ class _TestContainerState extends State<TestContainer> {
       case '2':
         _controller2.toggleCard();
         break;
-
       default:
         _controller3.toggleCard();
         break;
@@ -188,11 +189,12 @@ class _TestContainerState extends State<TestContainer> {
   }
 
   toggelCorrectAnswer() {
-    if (answers![0] == widget.quizzes[currentQuestion].correctAnswer) {
+    final correctAnswer = widget.quizzes[currentQuestion].correctAnswer;
+    if (answers![0] == correctAnswer) {
       _controller0.toggleCard();
-    } else if (answers![1] == widget.quizzes[currentQuestion].correctAnswer) {
+    } else if (answers![1] == correctAnswer) {
       _controller1.toggleCard();
-    } else if (answers![2] == widget.quizzes[currentQuestion].correctAnswer) {
+    } else if (answers![2] == correctAnswer) {
       _controller2.toggleCard();
     } else {
       _controller3.toggleCard();
@@ -200,23 +202,30 @@ class _TestContainerState extends State<TestContainer> {
   }
 
   nextQuestion() {
-    toggleController();
-    toggelCorrectAnswer();
+    if (currentQuestion >= prevStoppedAt) {
+      toggleController();
+      toggelCorrectAnswer();
+    }
+
     setState(() {
+      if (prevStoppedAt == currentQuestion) {
+        prevStoppedAt = -1;
+      }
+
       currentQuestion += 1;
       selectedOption = null;
       answers = widget.quizzes[currentQuestion].answers;
       checked = false;
     });
-
-    // if (widget.quizzes[currentQuestion].selectedAnswer == null) {
-    //   toggleController();
-    //   toggelCorrectAnswer();
-    // }
+    // print(object)
   }
 
   prevQuestion() {
+    print(prevStoppedAt);
     setState(() {
+      if (prevStoppedAt < 0) {
+        prevStoppedAt = currentQuestion;
+      }
       currentQuestion -= 1;
       selectedOption = null;
       answers = widget.quizzes[currentQuestion].answers;
